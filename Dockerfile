@@ -1,12 +1,25 @@
-FROM golang:1.17
+FROM golang:1.17-alpine AS build
 
-WORKDIR /usr/src/app
+RUN mkdir /build
 
-# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
-COPY go.mod go.sum ./
+ADD . /build/
+
+WORKDIR /build
+
 RUN go mod download && go mod verify
 
-COPY . .
-RUN go build -v -o /usr/local/bin/app ./...
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o bot .
 
-CMD ["app"]
+
+
+FROM alpine:latest 
+
+RUN mkdir /app
+COPY --from=build /build/bot ./app
+COPY --from=build /build/.env ./app
+
+ENTRYPOINT [ "./app/bot" ]
+
+
+
+

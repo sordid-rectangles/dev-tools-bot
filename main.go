@@ -149,7 +149,7 @@ func main() {
 
 	//Register Bot Intents with Discord
 	//worth noting MakeIntent is a no-op, but I want it there for doing something with pointers later
-	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAll)
+	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAllWithoutPrivileged)
 
 	// Open a websocket connection to Discord
 	err = dg.Open()
