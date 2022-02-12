@@ -16,7 +16,6 @@ FROM alpine:latest
 
 RUN mkdir /app
 COPY --from=build /build/bot ./app
-COPY --from=build /build/.env ./app
 
 ENTRYPOINT [ "./app/bot" ]
 
